@@ -1,6 +1,28 @@
-import { Instagram as InstagramIcon } from 'lucide-react'
-import { weddingData } from '../data/weddingData'
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Camera } from 'lucide-react';
+import { weddingData } from '../data/weddingData';
 
-export function Instagram() {
-  return <section className="section-pad bg-[#F8F0E3] text-center"><div className="mx-auto max-w-2xl"><InstagramIcon className="mx-auto text-[#6E1F2E]" size={24}/><p className="mt-5 text-[10px] uppercase tracking-[0.35em] text-[#6E1F2E]">Share the celebration</p><h2 className="mt-4 font-display text-5xl text-[#42131E]">Tag your moments</h2><p className="mx-auto mt-5 max-w-md font-serif text-base leading-7 text-[#291C1A]/65">Use our wedding hashtag so every laugh, dance and candid moment can become part of the story.</p><p className="mt-8 font-serif text-2xl italic text-[#B5965A]">{weddingData.couple.hashtag}</p></div></section>
-}
+export const Instagram: React.FC = () => {
+  return (
+    <section className="py-16 px-6 bg-ivory-light border-y border-gold/20 text-center">
+      <div className="max-w-xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="p-8 bg-ivory gold-border shadow-md"
+        >
+          <Camera className="w-8 h-8 text-maroon mx-auto mb-3" />
+          <h3 className="font-serif text-2xl text-maroon-dark mb-2">Share the Joy</h3>
+          <p className="text-xs sm:text-sm text-brown/70 mb-6">
+            Capture and share your cherished moments of our celebration using our official wedding hashtag.
+          </p>
+          <div className="inline-block px-6 py-3 bg-maroon text-gold text-sm tracking-[0.25em] font-serif gold-border">
+            {weddingData.couple.hashtag}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};

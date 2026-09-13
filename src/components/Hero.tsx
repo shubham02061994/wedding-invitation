@@ -1,51 +1,69 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { useRef } from 'react'
-import temple from '../assets/temple.png'
-import { weddingData } from '../data/weddingData'
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
+import templeArtworkUrl from '../assets/temple.png';
 
-export function Hero() {
-  const ref = useRef<HTMLElement>(null)
-  const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const scale = useTransform(scrollYProgress, [0, 0.75], [1, 1.28])
-  const leftX = useTransform(scrollYProgress, [0.15, 0.78], ['0%', '-48%'])
-  const rightX = useTransform(scrollYProgress, [0.15, 0.78], ['0%', '48%'])
-  const fade = useTransform(scrollYProgress, [0.55, 0.92], [1, 0])
-  const glow = useTransform(scrollYProgress, [0.15, 0.65], [0, 0.9])
+export const Hero: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
-  const art = (side: 'left' | 'right') => (
-    <motion.img
-      src={temple}
-      alt="Intricately sculpted South Indian temple gopuram"
-      className={`absolute bottom-0 left-1/2 h-[77vh] w-auto max-w-none -translate-x-1/2 object-contain object-bottom md:h-[90vh] ${side === 'left' ? '[clip-path:inset(0_50%_0_0)]' : '[clip-path:inset(0_0_0_50%)]'}`}
-      style={reduced ? undefined : { x: side === 'left' ? leftX : rightX, scale }}
-    />
-  )
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 0.8], [1, 1.8]);
+  const leftDoorX = useTransform(scrollYProgress, [0.1, 0.7], ["0%", "-100%"]);
+  const rightDoorX = useTransform(scrollYProgress, [0.1, 0.7], ["0%", "100%"]);
+  const glowOpacity = useTransform(scrollYProgress, [0.2, 0.6], [0, 1]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const bgFade = useTransform(scrollYProgress, [0.5, 0.9], [1, 0]);
+
+  if (shouldReduceMotion) {
+    return (
+      <section className="relative h-screen w-full bg-sky-200 flex flex-col items-center justify-between overflow-hidden pt-12 pb-8">
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-300 via-sky-100 to-[#F8F0E3] opacity-90" />
+        <div className="relative z-10 text-center px-4 mt-6">
+          <p className="text-maroon text-xs sm:text-sm tracking-[0.3em] uppercase mb-2 font-medium">A celebration of love</p>
+          <h1 className="font-serif text-5xl sm:text-7xl text-maroon-dark tracking-wide mb-3">Ranbir weds Alia</h1>
+          <p className="text-gold-muted text-sm sm:text-base tracking-[0.2em] uppercase font-serif">24 November 2026</p>
+        </div>
+        <div className="relative z-10 w-full max-w-xl px-4 flex justify-center">
+          <img src={templeArtworkUrl} alt="South Indian temple gopuram" className="max-h-[50vh] object-contain drop-shadow-2xl" />
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section ref={ref} className="relative h-[115vh] overflow-hidden bg-[#87CEEB]" aria-label="Wedding invitation cover">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,.32),transparent_34%),linear-gradient(#8ed3ef,#70b9df)]" />
-      <div className="absolute inset-0 opacity-70" aria-hidden="true">
-        <div className="absolute left-[-8%] top-[12%] h-24 w-64 rounded-full bg-white/55 blur-2xl" />
-        <div className="absolute right-[-10%] top-[25%] h-32 w-80 rounded-full bg-white/45 blur-3xl" />
-        <div className="absolute left-[12%] top-[34%] h-16 w-44 rounded-full bg-white/35 blur-2xl" />
+    <div ref={containerRef} className="relative h-[220vh] w-full">
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-sky-300 flex flex-col justify-between pt-12 pb-8">
+        <motion.div style={{ opacity: bgFade }} className="absolute inset-0 bg-gradient-to-b from-sky-300 via-sky-100 to-ivory" />
+        <motion.div style={{ opacity: glowOpacity }} className="absolute inset-0 bg-gradient-to-t from-amber-200 via-orange-100 to-transparent pointer-events-none z-10" />
+
+        <motion.div style={{ opacity: contentOpacity }} className="relative z-20 text-center px-4">
+          <p className="text-maroon text-xs sm:text-sm tracking-[0.3em] uppercase mb-2 font-medium">A celebration of love</p>
+          <h1 className="font-serif text-5xl sm:text-7xl text-maroon-dark tracking-wide mb-3">Ranbir weds Alia</h1>
+          <p className="text-gold-muted text-sm sm:text-base tracking-[0.2em] uppercase font-serif">24 November 2026</p>
+        </motion.div>
+
+        <div className="relative z-20 w-full flex-1 flex items-end justify-center overflow-hidden px-4">
+          <motion.div style={{ scale }} className="relative w-full max-w-lg h-full flex items-end justify-center">
+            <motion.div style={{ x: leftDoorX }} className="absolute inset-0 w-1/2 overflow-hidden z-20">
+              <img src={templeArtworkUrl} alt="Temple Gopuram Left" className="absolute bottom-0 left-0 max-h-[60vh] sm:max-h-[65vh] w-auto max-w-none object-contain drop-shadow-2xl" />
+            </motion.div>
+            <motion.div style={{ x: rightDoorX }} className="absolute inset-0 w-1/2 left-1/2 overflow-hidden z-20">
+              <img src={templeArtworkUrl} alt="Temple Gopuram Right" className="absolute bottom-0 right-0 max-h-[60vh] sm:max-h-[65vh] w-auto max-w-none object-contain drop-shadow-2xl" />
+            </motion.div>
+            <img src={templeArtworkUrl} alt="Temple Gopuram" className="max-h-[60vh] sm:max-h-[65vh] object-contain drop-shadow-2xl relative z-10 opacity-90" />
+          </motion.div>
+        </div>
+
+        <motion.div style={{ opacity: contentOpacity }} className="relative z-20 flex flex-col items-center justify-center mt-4">
+          <span className="text-xs uppercase tracking-[0.25em] text-maroon mb-1 font-serif">Scroll to explore</span>
+          <ChevronDown className="w-5 h-5 text-maroon animate-bounce" />
+        </motion.div>
       </div>
-      <div className="absolute inset-x-0 top-[12%] z-10 px-6 text-center text-white drop-shadow-sm">
-        <p className="mb-5 text-[10px] font-medium uppercase tracking-[0.42em] sm:text-xs">A celebration of love</p>
-        <h1 className="font-display text-6xl leading-[.9] sm:text-8xl md:text-9xl">Ranbir <span className="text-white/75">weds</span> Alia</h1>
-        <p className="mt-7 font-serif text-xl italic sm:text-2xl">{weddingData.date.display}</p>
-      </div>
-      <motion.div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none" style={reduced ? undefined : { opacity: glow }}>
-        <div className="h-[62vh] w-16 bg-[#fff3d0]/70 blur-3xl" />
-      </motion.div>
-      <motion.div className="absolute inset-0 z-30" style={reduced ? undefined : { opacity: fade }} aria-hidden="true">
-        {art('left')}{art('right')}
-      </motion.div>
-      <a href="#invitation" className="absolute bottom-8 left-1/2 z-40 flex -translate-x-1/2 flex-col items-center gap-2 text-white/90" aria-label="Scroll to explore the invitation">
-        <span className="text-[9px] uppercase tracking-[0.35em]">Scroll to explore</span>
-        <motion.span animate={reduced ? undefined : { y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}><ChevronDown size={18} /></motion.span>
-      </a>
-    </section>
-  )
-}
+    </div>
+  );
+};
