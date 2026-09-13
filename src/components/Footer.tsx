@@ -1,0 +1,3 @@
+import { Heart } from 'lucide-react'
+import { weddingData } from '../data/weddingData'
+export function Footer() { return <footer className="bg-[#FFF9EF] px-6 pb-12 pt-20 text-center text-[#42131E]"><p className="motif">✦ &nbsp; ✦ &nbsp; ✦</p><p className="mt-7 font-display text-6xl">Ranbir & Alia</p><p className="mt-4 font-serif text-sm italic text-[#291C1A]/60">{weddingData.date.display} · {weddingData.date.weekday}</p><div className="mx-auto my-8 h-px max-w-xs bg-[#B5965A]/50"/><p className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#291C1A]/45">Made with <Heart size={11} fill="currentColor"/> love</p></footer> }
